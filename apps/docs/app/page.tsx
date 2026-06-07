@@ -1,102 +1,79 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
+import Link from "next/link";
+import { getCategories } from "@/lib/registry";
 
-type Props = Omit<ImageProps, "src"> & {
-  srcLight: string;
-  srcDark: string;
-};
-
-const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, ...rest } = props;
+export default function DocsHomePage() {
+  const categories = getCategories();
 
   return (
-    <>
-      <Image {...rest} src={srcLight} className="imgLight" />
-      <Image {...rest} src={srcDark} className="imgDark" />
-    </>
-  );
-};
+    <div className="mx-auto max-w-4xl px-8 py-10">
+      <header className="mb-10">
+        <h1 className="text-3xl font-semibold tracking-tight">Pool House UI</h1>
+        <p className="text-muted-foreground mt-3 max-w-2xl text-sm leading-relaxed">
+          Component documentation with live previews, usage guides, and
+          copy-paste examples. Start with the guides below or pick a component
+          from the sidebar.
+        </p>
+      </header>
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <ThemeImage
-          className={styles.logo}
-          srcLight="turborepo-dark.svg"
-          srcDark="turborepo-light.svg"
-          alt="Turborepo logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>apps/docs/app/page.tsx</code>
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-            target="_blank"
-            rel="noopener noreferrer"
+      <section className="mb-10">
+        <h2 className="mb-4 text-lg font-medium">Getting started</h2>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Link
+            href="/playground"
+            className="hover:bg-muted/40 rounded-xl border border-border p-5 transition-colors"
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://turborepo.dev/docs?utm_source"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
+            <p className="font-medium">Theme Playground</p>
+            <p className="text-muted-foreground mt-1 text-sm">
+              Try color palettes and radius options with live previews.
+            </p>
+          </Link>
+          <Link
+            href="/components/data-table"
+            className="hover:bg-muted/40 rounded-xl border border-border p-5 transition-colors"
           >
-            Read our docs
-          </a>
+            <p className="font-medium">DataTable</p>
+            <p className="text-muted-foreground mt-1 text-sm">
+              Tables with sorting, pagination, loading skeletons, and filters.
+            </p>
+          </Link>
+          <Link
+            href="/components/use-table-filter"
+            className="hover:bg-muted/40 rounded-xl border border-border p-5 transition-colors"
+          >
+            <p className="font-medium">useTableFilter</p>
+            <p className="text-muted-foreground mt-1 text-sm">
+              Hook for search, pagination, and API query params.
+            </p>
+          </Link>
         </div>
-        <Button appName="docs" className={styles.secondary}>
-          Open alert
-        </Button>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://turborepo.dev?utm_source=create-turbo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to turborepo.dev →
-        </a>
-      </footer>
+      </section>
+
+      <section>
+        <h2 className="mb-4 text-lg font-medium">All components</h2>
+        <div className="space-y-6">
+          {categories.map(([category, components]) => (
+            <div key={category}>
+              <p className="text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase">
+                {category}
+              </p>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {components.map((component) => (
+                  <Link
+                    key={component.slug}
+                    href={`/components/${component.slug}`}
+                    className="hover:bg-muted/40 rounded-lg border border-border px-4 py-3 transition-colors"
+                  >
+                    <p className="text-sm font-medium">{component.name}</p>
+                    <p className="text-muted-foreground mt-0.5 line-clamp-1 text-xs">
+                      {component.description}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

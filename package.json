@@ -1,17 +1,35 @@
 {
-  "name": "pool-house-fronted",
+  "name": "next js monorepo starter",
   "private": true,
+  "author": "Prakash Shrestha",
+  "license": "MIT",
+  "version": "0.1.0",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "lint": "eslint . --max-warnings 0 && turbo run lint",
+    "lint:fix": "eslint . --max-warnings 0 --fix && turbo run lint -- --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,css}\"",
+    "check-types": "turbo run check-types",
+    "check": "pnpm run lint && pnpm run format:check && pnpm run check-types",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "eslint": "^9.39.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
     "prettier": "^3.7.4",
     "turbo": "^2.9.16",
     "typescript": "5.9.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs,cjs}": [
+      "eslint --fix --max-warnings 0 --no-warn-ignored",
+      "prettier --write"
+    ],
+    "*.{json,md,css}": "prettier --write"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {
