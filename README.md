@@ -159,3 +159,5 @@ Learn more about the power of Turborepo:
 - [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
 
 # next-js-monorepo-starter
+
+# snookAppFrontend
